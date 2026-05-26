@@ -47,10 +47,30 @@ const applyFunction = async (func: string) => {
 
 <template>
   <div class="calculator-module">
-    <div class="module-title">≡ 标准计算器</div>
+    <div class="module-title">
+      <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="display: inline-block; vertical-align: middle; margin-right: 10px;">
+        <rect x="4" y="2" width="16" height="20" rx="2"/>
+        <line x1="8" y1="6" x2="16" y2="6"/>
+        <line x1="8" y1="10" x2="8" y2="10.01"/>
+        <line x1="12" y1="10" x2="12" y2="10.01"/>
+        <line x1="16" y1="10" x2="16" y2="10.01"/>
+        <line x1="8" y1="14" x2="8" y2="14.01"/>
+        <line x1="12" y1="14" x2="12" y2="14.01"/>
+        <line x1="16" y1="14" x2="16" y2="14.01"/>
+        <line x1="8" y1="18" x2="8" y2="18.01"/>
+        <line x1="12" y1="18" x2="12" y2="18.01"/>
+        <line x1="16" y1="18" x2="16" y2="18.01"/>
+      </svg>
+      标准计算器
+    </div>
     <div class="screen-deck">
       <div class="track-line">{{ formulaTrack }}</div>
-      <div class="output-line">{{ currentInput }}</div>
+      <div 
+        class="output-line" 
+        :data-length="currentInput.length > 12 ? 'long' : 'normal'"
+      >
+        {{ currentInput }}
+      </div>
     </div>
     <div class="memory-ribbon">
       <span>MC</span><span>MR</span><span>M+</span><span>M-</span><span>MS</span>
@@ -91,22 +111,125 @@ const applyFunction = async (func: string) => {
 
 <style scoped>
 .calculator-module {
-  padding: 24px;
+  padding: 32px;
   display: flex;
   flex-direction: column;
   height: calc(100vh - 48px);
+  max-width: 500px;
+  margin: 0 auto;
 }
-.module-title { font-size: 20px; font-weight: 500; margin-bottom: 20px;}
-.screen-deck { text-align: right; padding: 20px 10px; background-color: #202020; }
-.track-line { font-size: 15px; color: #888888; min-height: 20px; }
-.output-line { font-size: 46px; font-weight: 700; color: #ffffff; }
-.memory-ribbon { display: flex; gap: 24px; color: #8c8c8c; font-size: 12px; margin-bottom: 12px; padding-left: 8px;}
-.buttons-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 3px; flex: 1; }
-button { border: none; font-size: 16px; color: white; border-radius: 3px; cursor: pointer; }
-.num-btn { background-color: #3b3b3b; }
-.num-btn:hover { background-color: #323232; }
-.op-btn { background-color: #323232; }
-.op-btn:hover { background-color: #2b2b2b; }
-.equal-btn { background-color: #d7a3e5; color: #000000; font-weight: 700; }
-.equal-btn:hover { background-color: #c592d3; }
+
+.module-title { 
+  font-size: 28px; 
+  font-weight: 700;
+  margin-bottom: 24px;
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+  letter-spacing: -0.5px;
+}
+
+.screen-deck { 
+  text-align: right; 
+  padding: 28px 20px; 
+  background: var(--bg-card);
+  border-radius: var(--border-radius-lg);
+  box-shadow: var(--shadow-md);
+  border: 1px solid var(--border-color);
+  margin-bottom: 20px;
+}
+
+.track-line { 
+  font-size: 16px; 
+  color: var(--text-secondary); 
+  min-height: 24px;
+  margin-bottom: 8px;
+}
+
+.output-line { 
+  font-size: clamp(24px, 8vw, 52px);
+  font-weight: 700; 
+  color: var(--text-primary);
+  letter-spacing: -1px;
+  overflow-wrap: break-word;
+  word-break: break-all;
+  line-height: 1.2;
+  max-width: 100%;
+  transition: font-size 0.2s ease;
+}
+
+.output-line[data-length="long"] {
+  font-size: clamp(18px, 5vw, 32px);
+}
+
+.memory-ribbon { 
+  display: flex; 
+  gap: 20px; 
+  color: var(--text-muted); 
+  font-size: 13px; 
+  margin-bottom: 16px; 
+  padding-left: 8px;
+}
+
+.buttons-grid { 
+  display: grid; 
+  grid-template-columns: repeat(4, 1fr); 
+  gap: 12px; 
+  flex: 1;
+}
+
+button { 
+  border: none; 
+  font-size: 18px; 
+  color: white; 
+  border-radius: var(--border-radius-sm); 
+  cursor: pointer;
+  transition: all 0.15s cubic-bezier(0.4, 0, 0.2, 1);
+  font-weight: 500;
+  box-shadow: var(--shadow-sm);
+}
+
+button:hover {
+  transform: translateY(-2px);
+  box-shadow: var(--shadow-md);
+}
+
+button:active {
+  transform: translateY(0);
+}
+
+.num-btn { 
+  background: var(--bg-card);
+  border: 1px solid var(--border-color);
+}
+
+.num-btn:hover { 
+  background: var(--bg-hover);
+  border-color: rgba(255, 255, 255, 0.15);
+}
+
+.op-btn { 
+  background: linear-gradient(135deg, rgba(102, 126, 234, 0.2) 0%, rgba(118, 75, 162, 0.2) 100%);
+  border: 1px solid rgba(102, 126, 234, 0.3);
+  color: var(--color-primary);
+  font-weight: 600;
+}
+
+.op-btn:hover { 
+  background: linear-gradient(135deg, rgba(102, 126, 234, 0.3) 0%, rgba(118, 75, 162, 0.3) 100%);
+  border-color: var(--color-primary);
+}
+
+.equal-btn { 
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  color: #ffffff;
+  font-weight: 700;
+  box-shadow: 0 4px 12px rgba(102, 126, 234, 0.3);
+}
+
+.equal-btn:hover { 
+  box-shadow: 0 6px 20px rgba(102, 126, 234, 0.4);
+  filter: brightness(1.1);
+}
 </style>

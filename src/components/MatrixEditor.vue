@@ -48,6 +48,15 @@ const updateCols = (v: number) => {
 const gridStyle = computed(() => ({
   gridTemplateColumns: `repeat(${localCols.value}, 70px)`
 }))
+
+defineExpose({
+  setData: (data: number[][]) => {
+    if (!data || data.length === 0) return
+    localRows.value = data.length
+    localCols.value = data[0].length
+    gridData.value = data.map(row => [...row])
+  }
+})
 </script>
 
 <template>
@@ -69,43 +78,74 @@ const gridStyle = computed(() => ({
 </template>
 
 <style scoped>
-.matrix-grid {
-  display: grid;
-  gap: 6px;
-  background-color: #252525;
-  padding: 8px;
-  border-radius: 4px;
-  width: max-content;
-}
-.matrix-cell {
-  width: 70px;
-  background-color: #333333;
-  border: 1px solid #444444;
-  color: white;
-  text-align: center;
-  padding: 6px 0;
-  border-radius: 3px;
-}
 .matrix-controls {
   display: flex;
-  gap: 12px;
-  margin-bottom: 8px;
+  gap: 16px;
+  margin-bottom: 12px;
   align-items: center;
 }
+
 .matrix-controls label {
-  color: #ccc;
-  font-size: 13px;
+  color: var(--text-secondary);
+  font-size: 14px;
   display: flex;
   align-items: center;
-  gap: 4px;
+  gap: 8px;
+  font-weight: 500;
 }
+
 .matrix-controls input {
-  width: 50px;
-  background: #333;
-  border: 1px solid #555;
-  color: white;
+  width: 60px;
+  background: var(--bg-secondary);
+  border: 1px solid var(--border-color);
+  color: var(--text-primary);
   text-align: center;
-  border-radius: 3px;
-  padding: 3px;
+  border-radius: var(--border-radius-sm);
+  padding: 6px 8px;
+  font-size: 14px;
+  outline: none;
+  transition: all 0.2s;
+}
+
+.matrix-controls input:focus {
+  border-color: var(--color-primary);
+  box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.1);
+}
+
+.matrix-controls input:hover {
+  border-color: rgba(255, 255, 255, 0.2);
+}
+
+.matrix-grid {
+  display: grid;
+  gap: 8px;
+  background: var(--bg-secondary);
+  padding: 16px;
+  border-radius: var(--border-radius);
+  width: max-content;
+  border: 1px solid var(--border-color);
+}
+
+.matrix-cell {
+  width: 70px;
+  background: var(--bg-card);
+  border: 1px solid var(--border-color);
+  color: var(--text-primary);
+  text-align: center;
+  padding: 8px 0;
+  border-radius: var(--border-radius-sm);
+  font-size: 14px;
+  outline: none;
+  transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.matrix-cell:focus {
+  border-color: var(--color-primary);
+  box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.15);
+  background: var(--bg-hover);
+}
+
+.matrix-cell:hover:not(:focus) {
+  border-color: rgba(255, 255, 255, 0.2);
 }
 </style>

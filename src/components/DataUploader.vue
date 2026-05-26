@@ -24,15 +24,34 @@ const handleFile = (e: Event) => {
 
 <style scoped>
 .upload-zone {
-  border: 2px dashed #444;
-  padding: 20px;
+  border: 2px dashed var(--border-color);
+  padding: 32px 24px;
   text-align: center;
-  border-radius: 6px;
+  border-radius: var(--border-radius-lg);
   cursor: pointer;
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  background: var(--bg-card);
 }
+
+.upload-zone:hover {
+  border-color: var(--color-success);
+  background: rgba(67, 233, 123, 0.05);
+  transform: translateY(-2px);
+  box-shadow: var(--shadow-md);
+}
+
 .picker-trigger {
   cursor: pointer;
-  color: #d7a3e5;
-  font-size: 14px;
+  color: var(--text-secondary);
+  font-size: 15px;
+  font-weight: 500;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+}
+
+.upload-zone:hover .picker-trigger {
+  color: var(--color-success);
 }
 </style>

@@ -118,7 +118,12 @@ const executePlot = async () => {
 
 <template>
   <div style="padding:24px;">
-    <h2>📈 2D 函数全自动化可视化绘图</h2>
+    <h2>
+      <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="display: inline-block; vertical-align: middle; margin-right: 10px;">
+        <polyline points="22 12 18 12 15 21 9 3 6 12 2 12"/>
+      </svg>
+      2D 函数全自动化可视化绘图
+    </h2>
     <ParamForm label="输入待采样的数学函数表达式 f(x):">
       <EquationInput v-model="expr" placeholder="例如: sin(x) * x" />
     </ParamForm>
@@ -307,28 +312,85 @@ const executePlot = async () => {
 </template>
 
 <style scoped>
-.action-trigger { background: #3a3a3a; border: 1px solid #555; color: white; padding: 10px 18px; border-radius: 4px; cursor: pointer; margin: 10px 0; }
+/* 标题样式 */
+h2 {
+  font-size: 32px;
+  margin-bottom: 30px;
+  background: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+  letter-spacing: -0.5px;
+}
+
+/* 快捷按钮 */
 .quick-btn {
-  background: #2b2b2b;
-  border: 1px solid #444;
-  color: #d7a3e5;
-  padding: 6px 12px;
-  border-radius: 4px;
+  background: var(--bg-card);
+  border: 1px solid var(--border-color);
+  color: var(--color-info);
+  padding: 10px 16px;
+  border-radius: var(--border-radius-sm);
   cursor: pointer;
-  font-size: 13px;
-  transition: all 0.2s;
+  font-size: 14px;
+  font-weight: 500;
+  transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+  box-shadow: var(--shadow-sm);
 }
+
 .quick-btn:hover {
-  background: #3a3a3a;
-  border-color: #d7a3e5;
+  background: var(--bg-hover);
+  border-color: var(--color-info);
+  transform: translateY(-2px);
+  box-shadow: var(--shadow-md);
 }
+
+.quick-btn:active {
+  transform: translateY(0);
+}
+
+/* 操作按钮 */
+.action-trigger { 
+  width: 100%;
+  margin-top: 20px;
+  background: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%);
+  border: none; 
+  color: white; 
+  padding: 14px 24px; 
+  border-radius: var(--border-radius); 
+  cursor: pointer;
+  font-size: 15px;
+  font-weight: 600;
+  letter-spacing: 0.5px;
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  box-shadow: 0 4px 12px rgba(79, 172, 254, 0.3);
+}
+
+.action-trigger:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 6px 20px rgba(79, 172, 254, 0.4);
+}
+
+.action-trigger:active {
+  transform: translateY(0);
+}
+
+/* SVG图表 */
 .vector-svg { 
-  background: #1a1a1a; 
+  background: var(--bg-card); 
   width: 100%; 
   height: auto;
-  border-radius: 4px;
+  border-radius: var(--border-radius-lg);
   cursor: crosshair;
+  box-shadow: var(--shadow-md);
+  border: 1px solid var(--border-color);
+  transition: all 0.3s;
 }
+
+.vector-svg:hover {
+  box-shadow: var(--shadow-lg);
+  border-color: rgba(79, 172, 254, 0.3);
+}
+
 .canvas-fallback {
   overflow-x: auto;
 }

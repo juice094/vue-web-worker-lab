@@ -13,11 +13,13 @@ defineProps<{ label: string }>()
 .form-group {
   display: flex;
   flex-direction: column;
-  gap: 6px;
-  margin-bottom: 12px;
+  gap: 8px;
+  margin-bottom: 16px;
 }
+
 .form-label {
-  font-size: 13px;
-  color: #cccccc;
+  font-size: 14px;
+  color: var(--text-secondary);
+  font-weight: 500;
 }
 </style>

@@ -15,12 +15,28 @@ defineEmits(['update:modelValue'])
 
 <style scoped>
 .raw-input {
-  background-color: #333333;
-  border: 1px solid #444444;
-  color: white;
-  padding: 10px;
-  border-radius: 4px;
-  font-size: 14px;
-  font-family: monospace;
+  background: var(--bg-secondary);
+  border: 2px solid var(--border-color);
+  color: var(--text-primary);
+  padding: 12px 16px;
+  border-radius: var(--border-radius-sm);
+  font-size: 15px;
+  font-family: 'Courier New', monospace;
+  outline: none;
+  transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+  width: 100%;
+}
+
+.raw-input:focus {
+  border-color: var(--color-info);
+  box-shadow: 0 0 0 4px rgba(79, 172, 254, 0.15);
+}
+
+.raw-input:hover {
+  border-color: rgba(255, 255, 255, 0.2);
+}
+
+.raw-input::placeholder {
+  color: var(--text-muted);
 }
 </style>

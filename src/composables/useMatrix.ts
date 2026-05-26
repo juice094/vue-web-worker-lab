@@ -9,6 +9,10 @@ export function useMatrix() {
   const transpose = (matrix: number[][]) => run<number[][]>('transpose', { matrix })
   const determinant = (matrix: number[][]) => run<number>('determinant', { matrix })
   const inverse = (matrix: number[][]) => run<number[][]>('inverse', { matrix })
+  const power = (matrix: number[][], exponent: number) => run<number[][]>('power', { matrix, exponent })
+  const trace = (matrix: number[][]) => run<number>('trace', { matrix })
+  const norm = (matrix: number[][]) => run<number>('norm', { matrix })
+  const rank = (matrix: number[][]) => run<number>('rank', { matrix })
 
-  return { multiply, add, subtract, transpose, determinant, inverse }
+  return { multiply, add, subtract, transpose, determinant, inverse, power, trace, norm, rank }
 }

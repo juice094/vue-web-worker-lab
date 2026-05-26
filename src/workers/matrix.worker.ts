@@ -1,7 +1,7 @@
-const TIMEOUT_MS = 5000
+const MATRIX_TIMEOUT_MS = 5000
 
-function checkTimeout(start: number) {
-  if (Date.now() - start > TIMEOUT_MS) {
+function checkMatrixTimeout(start: number) {
+  if (Date.now() - start > MATRIX_TIMEOUT_MS) {
     throw new Error('计算超时（超过5秒），请降低矩阵阶数')
   }
 }
@@ -52,7 +52,7 @@ function transpose(matrix: number[][]) {
 }
 
 function determinant(matrix: number[][], startTime: number): number {
-  checkTimeout(startTime)
+  checkMatrixTimeout(startTime)
   const n = matrix.length
   if (n !== matrix[0].length) throw new Error('必须为方阵')
   if (n === 1) return matrix[0][0]
@@ -67,7 +67,7 @@ function determinant(matrix: number[][], startTime: number): number {
 }
 
 function inverse(matrix: number[][], startTime: number): number[][] {
-  checkTimeout(startTime)
+  checkMatrixTimeout(startTime)
   const n = matrix.length
   if (n !== matrix[0].length) throw new Error('必须为方阵才能求逆')
   const det = determinant(matrix, startTime)
@@ -84,6 +84,76 @@ function inverse(matrix: number[][], startTime: number): number[][] {
     }
   }
   return adj.map(row => row.map(v => v / det))
+}
+
+function power(matrix: number[][], exponent: number, startTime: number): number[][] {
+  checkMatrixTimeout(startTime)
+  const n = matrix.length
+  if (n !== matrix[0].length) throw new Error('必须为方阵才能求幂')
+  if (exponent === 0) {
+    // 返回单位矩阵
+    return Array(n).fill(0).map((_, i) => Array(n).fill(0).map((__, j) => i === j ? 1 : 0))
+  }
+  if (exponent === 1) return matrix.map(row => [...row])
+  
+  let result = matrix.map(row => [...row])
+  for (let i = 2; i <= exponent; i++) {
+    checkMatrixTimeout(startTime)
+    result = multiply(result, matrix)
+  }
+  return result
+}
+
+function trace(matrix: number[][], startTime: number): number {
+  checkMatrixTimeout(startTime)
+  const n = matrix.length
+  if (n !== matrix[0].length) throw new Error('必须为方阵才能求迹')
+  return matrix.reduce((sum, row, i) => sum + row[i], 0)
+}
+
+function norm(matrix: number[][]): number {
+  // Frobenius 范数
+  return Math.sqrt(matrix.reduce((sum, row) => 
+    sum + row.reduce((rowSum, val) => rowSum + val * val, 0), 0
+  ))
+}
+
+function rank(matrix: number[][], startTime: number): number {
+  checkMatrixTimeout(startTime)
+  // 高斯消元求秩
+  const m = matrix.map(row => [...row])
+  const rows = m.length
+  const cols = m[0].length
+  let rank = 0
+  
+  for (let col = 0; col < cols && rank < rows; col++) {
+    checkMatrixTimeout(startTime)
+    // 找主元
+    let pivotRow = rank
+    for (let i = rank + 1; i < rows; i++) {
+      if (Math.abs(m[i][col]) > Math.abs(m[pivotRow][col])) {
+        pivotRow = i
+      }
+    }
+    
+    if (Math.abs(m[pivotRow][col]) < 1e-10) continue
+    
+    // 交换行
+    if (pivotRow !== rank) {
+      [m[rank], m[pivotRow]] = [m[pivotRow], m[rank]]
+    }
+    
+    // 消元
+    for (let i = rank + 1; i < rows; i++) {
+      const factor = m[i][col] / m[rank][col]
+      for (let j = col; j < cols; j++) {
+        m[i][j] -= factor * m[rank][j]
+      }
+    }
+    rank++
+  }
+  
+  return rank
 }
 
 self.onmessage = (e: MessageEvent) => {
@@ -113,6 +183,22 @@ self.onmessage = (e: MessageEvent) => {
     } else if (action === 'inverse') {
       const { matrix } = payload
       const result = inverse(matrix, startTime)
+      self.postMessage({ id, status: 'complete', result })
+    } else if (action === 'power') {
+      const { matrix, exponent } = payload
+      const result = power(matrix, exponent, startTime)
+      self.postMessage({ id, status: 'complete', result })
+    } else if (action === 'trace') {
+      const { matrix } = payload
+      const result = trace(matrix, startTime)
+      self.postMessage({ id, status: 'complete', result })
+    } else if (action === 'norm') {
+      const { matrix } = payload
+      const result = norm(matrix)
+      self.postMessage({ id, status: 'complete', result })
+    } else if (action === 'rank') {
+      const { matrix } = payload
+      const result = rank(matrix, startTime)
       self.postMessage({ id, status: 'complete', result })
     }
   } catch (err: any) {

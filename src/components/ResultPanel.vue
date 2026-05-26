@@ -14,21 +14,43 @@ defineProps<{ title: string; error?: string }>()
 
 <style scoped>
 .result-card {
-  background-color: #2b2b2b;
-  border-radius: 6px;
-  border: 1px solid #3c3c3c;
-  padding: 16px;
-  margin-top: 15px;
+  background: var(--bg-card);
+  border-radius: var(--border-radius-lg);
+  border: 1px solid var(--border-color);
+  padding: 24px;
+  margin-top: 20px;
+  box-shadow: var(--shadow-md);
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
 }
+
+.result-card:hover {
+  box-shadow: var(--shadow-lg);
+}
+
 .card-title {
-  font-size: 13px;
-  color: #b5b5b5;
-  margin-bottom: 10px;
+  font-size: 15px;
+  color: var(--text-secondary);
+  margin-bottom: 16px;
   font-weight: 600;
   text-transform: uppercase;
+  letter-spacing: 1px;
+  padding-bottom: 12px;
+  border-bottom: 2px solid rgba(255, 255, 255, 0.05);
 }
+
+.card-content {
+  min-height: 60px;
+}
+
 .error-msg {
-  color: #ff6b6b;
-  font-size: 14px;
+  color: var(--color-warning);
+  font-size: 15px;
+  padding: 16px;
+  background: rgba(245, 87, 108, 0.1);
+  border-radius: var(--border-radius-sm);
+  border-left: 4px solid var(--color-warning);
+  display: flex;
+  align-items: center;
+  gap: 10px;
 }
 </style>
