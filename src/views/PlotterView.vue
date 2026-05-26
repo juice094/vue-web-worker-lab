@@ -22,8 +22,8 @@ const yRange = computed(() => {
   return { min: min - padding, max: max + padding }
 })
 
-// 坐标转换
-const viewBox = { width: 600, height: 400 }
+// 固定坐标转换（使用固定尺寸避免缩放问题）
+const viewBox = { width: 800, height: 500 }
 const margin = { top: 30, right: 30, bottom: 40, left: 50 }
 const plotWidth = viewBox.width - margin.left - margin.right
 const plotHeight = viewBox.height - margin.top - margin.bottom
@@ -73,7 +73,7 @@ const insertFunction = (func: string) => {
   }
 }
 
-// 点击图表获取坐标
+// 点击图表获取坐标（固定尺寸，简单计算）
 const handleSvgClick = (event: MouseEvent) => {
   const svg = (event.target as HTMLElement).closest('svg') as SVGSVGElement
   if (!svg || coords.value.length === 0) return
@@ -374,16 +374,20 @@ h2 {
   transform: translateY(0);
 }
 
-/* SVG图表 */
+/* SVG图表 - 固定尺寸防止缩放问题 */
 .vector-svg { 
   background: var(--bg-card); 
   width: 100%; 
+  max-width: 800px;
   height: auto;
+  aspect-ratio: 800 / 500;
   border-radius: var(--border-radius-lg);
   cursor: crosshair;
   box-shadow: var(--shadow-md);
   border: 1px solid var(--border-color);
   transition: all 0.3s;
+  user-select: none;
+  -webkit-user-select: none;
 }
 
 .vector-svg:hover {

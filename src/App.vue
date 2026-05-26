@@ -1,13 +1,36 @@
 <script setup lang="ts">
 import { useRouter, useRoute } from 'vue-router'
 import { useAppStore } from './stores/appStore'
-import { ref, computed, watch } from 'vue'
+import { ref, computed, watch, onMounted, onUnmounted } from 'vue'
 
 const router = useRouter()
 const route = useRoute()
 const appStore = useAppStore()
 const isSidebarCollapsed = ref(false)
 const navItems = router.getRoutes().filter(r => r.meta && r.meta.nav)
+
+// 禁止浏览器缩放
+const preventZoom = (e: KeyboardEvent) => {
+  if ((e.ctrlKey || e.metaKey) && (e.key === '+' || e.key === '-' || e.key === '=' || e.key === '0')) {
+    e.preventDefault()
+  }
+}
+
+const preventWheelZoom = (e: WheelEvent) => {
+  if (e.ctrlKey || e.metaKey) {
+    e.preventDefault()
+  }
+}
+
+onMounted(() => {
+  window.addEventListener('keydown', preventZoom)
+  window.addEventListener('wheel', preventWheelZoom, { passive: false })
+})
+
+onUnmounted(() => {
+  window.removeEventListener('keydown', preventZoom)
+  window.removeEventListener('wheel', preventWheelZoom)
+})
 
 // Worker 进度状态
 const workerProgress = ref(0)
